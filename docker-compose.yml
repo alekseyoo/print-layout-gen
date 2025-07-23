@@ -1,0 +1,19 @@
+version: '3.8'
+
+# Define the services (containers) that make up your application
+services:
+  # Name of our service
+  web:
+    # Build the Docker image from the Dockerfile in the current directory (.)
+    build: .
+    # Map port 5000 on the host machine to port 5000 in the container
+    ports:
+      - "35124:35124"
+    # Mount the current directory on the host to /app in the container
+    # This enables live-reloading of code for development
+    volumes:
+      - .:/app
+    # Set environment variables for Flask
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_DEBUG=1
