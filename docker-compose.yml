@@ -1,9 +1,8 @@
-version: '3.8'
+version: '0.14'
 
 # Define the services (containers) that make up your application
 services:
-  # Name of our service
-  web:
+   web:
     # Build the Docker image from the Dockerfile in the current directory (.)
     build: .
     # Map port 5000 on the host machine to port 5000 in the container
