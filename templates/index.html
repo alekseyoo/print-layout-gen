@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced PDF Label Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Advanced PDF Label Generator</h1>
+            <p>Customize your layout, use custom fonts, and get a multi-page, print-ready PDF.</p>
+        </header>
+
+        <div class="main-content">
+            <div class="settings-panel">
+                <h2>Settings</h2>
+                <!-- This form is now only used for the final download and for JS to grab data -->
+                <form id="pdf-form" action="/generate" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <legend>Page Layout</legend>
+                        <div class="form-group">
+                            <label for="orientation">Page Orientation</label>
+                            <select id="orientation" name="orientation" class="auto-update">
+                                <option value="L">Landscape</option>
+                                <option value="P">Portrait</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="num_cols">Columns on Page</label>
+                            <input type="number" id="num_cols" name="num_cols" value="8" min="1" class="auto-update">
+                        </div>
+                        <div class="form-group">
+                            <label for="num_rows">Rows on Page</label>
+                            <input type="number" id="num_rows" name="num_rows" value="2" min="1" class="auto-update">
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Cell & Text</legend>
+                        <div class="form-group">
+                            <label for="cell_width">Cell Width (mm)</label>
+                            <input type="number" id="cell_width" name="cell_width" value="29" min="1" class="auto-update">
+                        </div>
+                        <div class="form-group">
+                            <label for="cell_height">Cell Height (mm)</label>
+                            <input type="number" id="cell_height" name="cell_height" value="40" min="1" class="auto-update">
+                        </div>
+                        <div class="form-group">
+                            <label for="font_family">Font</label>
+                            <select id="font_family" name="font_family" class="auto-update">
+                                <!-- This loop is populated by the 'fonts' dictionary from app.py -->
+                                {% for key, value in fonts.items() %}
+                                <option value="{{ key }}">{{ value }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="font_size">Font Size</label>
+                            <input type="number" id="font_size" name="font_size" value="12" min="1" class="auto-update">
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Data & Options</legend>
+                        <div class="form-group">
+                            <label for="default_text">Default Text (use if no CSV)</label>
+                            <input type="text" id="default_text" name="default_text" value="A. Student with a longer name" class="auto-update">
+                        </div>
+                        <div class="form-group">
+                            <label for="csv_file">Or Upload CSV File</label>
+                            <input type="file" id="csv_file" name="csv_file" accept=".csv" class="auto-update">
+                        </div>
+                        <div class="form-group-checkbox">
+                            <input type="checkbox" id="skip_last" name="skip_last" class="auto-update">
+                            <label for="skip_last">Leave last cell of each page empty</label>
+                        </div>
+                    </fieldset>
+                    
+                    <!-- The only button in the form is now the final download button -->
+                    <div class="button-group">
+                        <button type="submit">Download Final PDF</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="preview-panel">
+                <h2>Live Preview (Updates Automatically)</h2>
+                <!-- This container will be filled by JavaScript with page images -->
+                <div id="preview-container">
+                    <p>Your preview will appear here once you change a setting.</p>
+                    <div id="loading-spinner" class="hidden"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Link to the JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
