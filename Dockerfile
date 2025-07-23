@@ -1,13 +1,20 @@
-FROM python:3.11-slim
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
 
+# Set the working directory in the container
 WORKDIR /app
 
-COPY requirements.txt .
+# Copy package.json and package-lock.json (or yarn.lock)
+COPY package*.json ./
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Install project dependencies
+RUN npm install
 
+# Copy the rest of your application code
 COPY . .
 
+# Expose the port the app runs on
 EXPOSE 35124
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Command to run the app in development mode
+CMD ["npm", "run", "dev"]
