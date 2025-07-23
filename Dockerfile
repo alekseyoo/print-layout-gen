@@ -1,20 +1,19 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18-alpine
+FROM python:3.11-slim
 
-# Set the working directory in the container
+# Step 2: Install git, which is needed to clone the repository
+RUN apt-get update && apt-get install -y git
+
+# Step 3: Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock)
-COPY package*.json ./
+# Step 4: Clone the public repository from GitHub into the working directory
+RUN git clone https://github.com/alekseyoo/print-layout-gen.git .
 
-# Install project dependencies
-RUN npm install
+# Step 5: Install the Python dependencies listed in the repository's requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of your application code
-COPY . .
+# Step 6: Expose the port the Flask app runs on internally
+EXPOSE 5000
 
-# Expose the port the app runs on
-EXPOSE 35124
-
-# Command to run the app in development mode
-CMD ["npm", "run", "dev"]
+# Step 7: Define the command to run the application
+CMD ["flask", "run", "--host=0.0.0.0"]

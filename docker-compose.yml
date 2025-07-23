@@ -1,12 +1,17 @@
 services:
   web:
+    # Tells Docker to build the image from the Dockerfile in the current directory
     build: .
-    container_name: print-layout-app
+    
+    # Maps port 35124 on your machine to port 5000 inside the container
     ports:
-      - "35124:35124"
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
+      - "35124:5000"
+      
+    # Sets the necessary environment variables for Flask to run
     environment:
-      - NODE_ENV=development
+      - FLASK_APP=app.py
+      # Set to 0 for a deployment environment to disable debug mode
+      - FLASK_DEBUG=0
+      
+    # Automatically restarts the container if it crashes
+    restart: unless-stopped
